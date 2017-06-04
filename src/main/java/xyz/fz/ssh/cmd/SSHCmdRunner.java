@@ -64,7 +64,7 @@ public class SSHCmdRunner implements CommandLineRunner {
                 break;
         }
 
-        System.out.println("按任意键退出...");
+        System.out.println("按回车键退出...");
         int r = System.in.read();
     }
 }
