@@ -40,32 +40,28 @@ public class SSHUtil {
     @Value("${remote.root.password}")
     private String rootPwd;
 
-    private static final String BACKUP = "backup";
-
-    private static final String RESTORE = "restore";
-
-    public static final String OVER = "over";
+    public static final String RESTART = "restart";
 
     public static final String UPGRADE = "upgrade";
 
-    public String backupOrRestore(String backupCmds, String restoreCmds) {
-        String next = OVER;
+    public static final String RESTORE = "restore";
+
+    public String cmdChoice() {
+        String resultChoice;
         while (true) {
-            System.out.print("backup or restore: ");
+            System.out.print("restart or upgrade or restore: ");
             Scanner scanner = new Scanner(System.in);
             String choice = scanner.nextLine();
-            if (StringUtils.equals(BACKUP, choice)) {
-                logger.info("backup time: {}", BaseUtil.toLongDate(new Date()));
-                execCmds(backupCmds);
-                next = UPGRADE;
+            resultChoice = choice;
+            if (StringUtils.equals(RESTART, choice)) {
+                break;
+            } else if (StringUtils.equals(UPGRADE, choice)) {
                 break;
             } else if (StringUtils.equals(RESTORE, choice)) {
-                logger.info("restore time: {}", BaseUtil.toLongDate(new Date()));
-                execCmds(restoreCmds);
                 break;
             }
         }
-        return next;
+        return resultChoice;
     }
 
     public void securityCheck() {

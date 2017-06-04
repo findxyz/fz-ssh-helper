@@ -1,6 +1,5 @@
 package xyz.fz.ssh.cmd;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +11,21 @@ import xyz.fz.ssh.util.SSHUtil;
 
 import java.util.Date;
 
-import static xyz.fz.ssh.util.SSHUtil.OVER;
-import static xyz.fz.ssh.util.SSHUtil.UPGRADE;
+import static xyz.fz.ssh.util.SSHUtil.*;
 
 @Component
 public class SSHCmdRunner implements CommandLineRunner {
 
     private Logger logger = LoggerFactory.getLogger(SSHCmdRunner.class);
 
-    @Value("${remote.cmd}")
-    private String cmds;
+    @Value("${remote.restart}")
+    private String restartCmds;
 
     @Value("${remote.backup}")
     private String backupCmds;
+
+    @Value("${remote.upgrade}")
+    private String upgradeCmds;
 
     @Value("${remote.restore}")
     private String restoreCmds;
@@ -39,19 +40,28 @@ public class SSHCmdRunner implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
 
-        String choice = sshUtil.backupOrRestore(backupCmds, restoreCmds);
-        if (StringUtils.equals(UPGRADE, choice)) {
-            System.out.println("backup finish");
+        String choice = sshUtil.cmdChoice();
+        switch (choice) {
+            case RESTART:
+                logger.info("restart time: {}", BaseUtil.toLongDate(new Date()));
+                sshUtil.execCmds(restartCmds);
+                System.out.println("restart finish");
+                break;
+            case UPGRADE:
+                logger.info("backup time: {}", BaseUtil.toLongDate(new Date()));
+                sshUtil.execCmds(backupCmds);
+                System.out.println("backup finish");
 
-            sshUtil.securityCheck();
-
-            logger.info("upgrade time: {}", BaseUtil.toLongDate(new Date()));
-
-            sshUtil.execCmds(cmds);
-
-            System.out.println("upgrade finish");
-        } else if (StringUtils.equals(OVER, choice)) {
-            System.out.println("restore finish");
+                sshUtil.securityCheck();
+                logger.info("upgrade time: {}", BaseUtil.toLongDate(new Date()));
+                sshUtil.execCmds(upgradeCmds);
+                System.out.println("upgrade finish");
+                break;
+            case RESTORE:
+                logger.info("restore time: {}", BaseUtil.toLongDate(new Date()));
+                sshUtil.execCmds(restoreCmds);
+                System.out.println("restore finish");
+                break;
         }
 
         System.out.println("按任意键退出...");
