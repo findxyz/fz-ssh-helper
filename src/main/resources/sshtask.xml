@@ -15,21 +15,25 @@
         <command>
             <before>
                 <clazz>CustomCmd</clazz>
-                <method>securityCheck</method>
+                <method>stepOne</method>
             </before>
             <target>
                 <username>runner</username>
-                <cmd>ls -l</cmd>
+                <cmd>sh /home/runner/t.sh</cmd>
             </target>
         </command>
         <command>
+            <before>
+                <clazz>CustomCmd</clazz>
+                <method>stepTwo</method>
+            </before>
             <target>
                 <username>root</username>
                 <cmd>ls -l</cmd>
             </target>
             <after>
                 <clazz>CustomCmd</clazz>
-                <method>securityCheck</method>
+                <method>stepThree</method>
             </after>
         </command>
     </commands>

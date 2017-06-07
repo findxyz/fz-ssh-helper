@@ -4,7 +4,11 @@ import java.util.Scanner;
 
 public class CustomCmd {
 
-    public void securityCheck() {
+    public void stepOne() {
+        System.out.println("step one");
+    }
+
+    public void stepTwo() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         while (true) {
             System.out.print("天王盖地虎: ");
@@ -17,5 +21,9 @@ public class CustomCmd {
                 System.out.println("×××××");
             }
         }
+    }
+
+    public void stepThree() {
+        System.out.println("step three");
     }
 }

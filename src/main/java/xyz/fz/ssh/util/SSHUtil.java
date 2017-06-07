@@ -22,6 +22,7 @@ public class SSHUtil {
 
     public void exec(String host, String username, String password, String cmd) {
 
+        logger.info("begin: {}", BaseUtil.toLongDate(new Date()));
         JSch jsch = new JSch();
         Session session = null;
         ChannelExec channel = null;
@@ -33,7 +34,6 @@ public class SSHUtil {
             session.connect();
 
             // exec command remotely
-            logger.info(BaseUtil.toLongDate(new Date()));
             logger.info("host: {}, username: {}, cmd: {}", host, username, cmd);
             channel = (ChannelExec) session.openChannel("exec");
             channel.setCommand(cmd);
@@ -73,5 +73,6 @@ public class SSHUtil {
                 session.disconnect();
             }
         }
+        logger.info("end: {}", BaseUtil.toLongDate(new Date()));
     }
 }
