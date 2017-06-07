@@ -37,7 +37,9 @@ public class SSHUtil {
                 exec(host, username, password, targetCmd);
                 while (true) {
                     String result = execResult(host, username, password, checkCmd);
+                    System.out.println("execResult返回结果：" + result);
                     if (result.contains(wantedResult)) {
+                        System.out.println("预期结果匹配成功！");
                         break;
                     }
                     try {
