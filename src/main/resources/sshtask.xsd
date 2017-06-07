@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 (http://www.altova.com) by  () -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="sshtask">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="host" type="xs:string"/>
+				<xs:element name="users">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="user" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="username" type="xs:string" default=""/>
+										<xs:element name="password" type="xs:string" default=""/>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="commands">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="command" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="before" minOccurs="0">
+											<xs:complexType>
+												<xs:all>
+													<xs:element name="clazz" type="xs:string" default=""/>
+													<xs:element name="method" type="xs:string" default=""/>
+												</xs:all>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="target">
+											<xs:complexType>
+												<xs:all>
+													<xs:element name="username" type="xs:string" default=""/>
+													<xs:element name="cmd" type="xs:string" default=""/>
+												</xs:all>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="after" minOccurs="0">
+											<xs:complexType>
+												<xs:all>
+													<xs:element name="clazz" type="xs:string" default=""/>
+													<xs:element name="method" type="xs:string" default=""/>
+												</xs:all>
+											</xs:complexType>
+										</xs:element>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

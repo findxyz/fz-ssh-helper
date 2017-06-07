@@ -6,93 +6,21 @@ import com.jcraft.jsch.Session;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.io.StreamTokenizer;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.Scanner;
 
 @Component
 public class SSHUtil {
 
     private static Logger logger = LoggerFactory.getLogger(SSHUtil.class);
 
-    @Value("${remote.runner.prefix}")
-    private String runnerPrefix;
-
-    @Value("${remote.root.prefix}")
-    private String rootPrefix;
-
-    @Value("${remote.host}")
-    private String host;
-
-    @Value("${remote.runner.username}")
-    private String runner;
-
-    @Value("${remote.runner.password}")
-    private String runnerPwd;
-
-    @Value("${remote.root.username}")
-    private String root;
-
-    @Value("${remote.root.password}")
-    private String rootPwd;
-
-    public static final String RESTART = "restart";
-
-    public static final String UPGRADE = "upgrade";
-
-    public static final String RESTORE = "restore";
-
-    public String cmdChoice() {
-        String resultChoice;
-        while (true) {
-            System.out.print("restart or upgrade or restore: ");
-            Scanner scanner = new Scanner(System.in);
-            String choice = scanner.nextLine();
-            resultChoice = choice;
-            if (StringUtils.equals(RESTART, choice)) {
-                break;
-            } else if (StringUtils.equals(UPGRADE, choice)) {
-                break;
-            } else if (StringUtils.equals(RESTORE, choice)) {
-                break;
-            }
-        }
-        return resultChoice;
-    }
-
-    public void securityCheck() {
-        while (true) {
-            System.out.print("天王盖地虎: ");
-            Scanner scanner = new Scanner(System.in);
-            String secretSignal = scanner.nextLine();
-            if (StringUtils.equals(BaseUtil.toShortDate(new Date()), secretSignal)) {
-                System.out.println("√√√√√");
-                break;
-            } else {
-                System.out.println("×××××");
-            }
-        }
-    }
-
-    public void execCmds(String cmds) {
-        String[] cmdArr = cmds.split("#");
-        if (cmdArr.length > 0) {
-            for (String cmd : cmdArr) {
-                logger.info("cmd: {}", cmd);
-                if (cmd.startsWith(runnerPrefix)) {
-                    exec(host, runner, runnerPwd, cmd.replace(runnerPrefix, ""));
-                } else if (cmd.startsWith(rootPrefix)) {
-                    exec(host, root, rootPwd, cmd.replace(rootPrefix, ""));
-                }
-            }
-        }
-    }
-
-    private void exec(String host, String username, String password, String cmd) {
+    public void exec(String host, String username, String password, String cmd) {
 
         JSch jsch = new JSch();
         Session session = null;
@@ -105,6 +33,8 @@ public class SSHUtil {
             session.connect();
 
             // exec command remotely
+            logger.info(BaseUtil.toLongDate(new Date()));
+            logger.info("host: {}, username: {}, cmd: {}", host, username, cmd);
             channel = (ChannelExec) session.openChannel("exec");
             channel.setCommand(cmd);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

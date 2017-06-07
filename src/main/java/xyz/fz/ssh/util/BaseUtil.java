@@ -1,14 +1,17 @@
 package xyz.fz.ssh.util;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by fz on 2016/9/7.
- */
 public class BaseUtil {
 
     private static final ThreadLocal<DateFormat> shortDf = new ThreadLocal<DateFormat>() {
@@ -53,6 +56,27 @@ public class BaseUtil {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+        }
+    }
+
+    public static String JAXBMarshal(Object obj) throws IOException, JAXBException {
+        String xml = "";
+        try (StringWriter sw = new StringWriter()) {
+            JAXBContext context = JAXBContext.newInstance(obj.getClass());
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+            marshaller.marshal(obj, sw);
+            xml = sw.toString();
+        }
+        return xml;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T JAXBUnMarshal(String xml, Class<T> cls) throws JAXBException {
+        try (StringReader sr = new StringReader(xml)) {
+            JAXBContext context = JAXBContext.newInstance(cls);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            return (T) unmarshaller.unmarshal(sr);
         }
     }
 }

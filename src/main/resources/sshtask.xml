@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sshtask>
+    <host>example.xyz</host>
+    <users>
+        <user>
+            <username>runner</username>
+            <password>runner</password>
+        </user>
+        <user>
+            <username>root</username>
+            <password>root</password>
+        </user>
+    </users>
+    <commands>
+        <command>
+            <before>
+                <clazz>CustomCmd</clazz>
+                <method>securityCheck</method>
+            </before>
+            <target>
+                <username>runner</username>
+                <cmd>ls -l</cmd>
+            </target>
+        </command>
+        <command>
+            <target>
+                <username>root</username>
+                <cmd>ls -l</cmd>
+            </target>
+            <after>
+                <clazz>CustomCmd</clazz>
+                <method>securityCheck</method>
+            </after>
+        </command>
+    </commands>
+</sshtask>
