@@ -43,7 +43,7 @@ public class CmdExecutor {
             }
 
             Sshtask.Commands.Command.Target target = command.getTarget();
-            sshUtil.exec(keyMap.get(HOST), target.getUsername(), keyMap.get(target.getUsername()), target.getCmd());
+            sshUtil.execCmds(keyMap.get(HOST), target.getUsername(), keyMap.get(target.getUsername()), target.getCmd());
 
             Sshtask.Commands.Command.After after = command.getAfter();
             if (after != null) {

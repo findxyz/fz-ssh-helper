@@ -19,7 +19,7 @@
             </before>
             <target>
                 <username>runner</username>
-                <cmd>sh /home/runner/t.sh</cmd>
+                <cmd>while:sh /home/runner/t.sh:sh /home/runner/c.sh:done</cmd>
             </target>
         </command>
         <command>
